@@ -34,12 +34,12 @@ if ($ramGB -lt 8) {
 }
 Write-Host ''
 
-# ---- 步驟 1/7：安裝 Ollama 推論引擎 -------------------------
+# ---- 步驟 1/8：安裝 Ollama 推論引擎 -------------------------
 $ollama = Join-Path $env:LOCALAPPDATA 'Programs\Ollama\ollama.exe'
 if (Test-Path $ollama) {
-    Write-Host '[1/7] Ollama 已安裝，略過。'
+    Write-Host '[1/8] Ollama 已安裝，略過。'
 } else {
-    Write-Host '[1/7] 安裝 Ollama 推論引擎（約需 1-3 分鐘）...'
+    Write-Host '[1/8] 安裝 Ollama 推論引擎（約需 1-3 分鐘）...'
     Start-Process -Wait (Join-Path $root 'installers\OllamaSetup.exe') `
         -ArgumentList '/VERYSILENT', '/NORESTART', '/SUPPRESSMSGBOXES'
     if (-not (Test-Path $ollama)) { throw 'Ollama 安裝失敗，請手動執行 installers\OllamaSetup.exe' }
@@ -55,8 +55,8 @@ try {
 if (-not (Wait-OllamaServer)) { throw '無法啟動 Ollama 服務，請重新開機後再執行本腳本一次。' }
 Write-Host '      Ollama 服務已啟動 (http://127.0.0.1:11434)。'
 
-# ---- 步驟 2/7：匯入本機模型 ---------------------------------
-Write-Host '[2/7] 匯入 AI 模型（大檔案要複製與計算雜湊，約需 3-10 分鐘，請耐心等候）...'
+# ---- 步驟 2/8：匯入本機模型 ---------------------------------
+Write-Host '[2/8] 匯入 AI 模型（大檔案要複製與計算雜湊，約需 3-10 分鐘，請耐心等候）...'
 
 $systemPrompt = '你是專業的中文文書處理助理，擅長摘要、潤稿、改寫、翻譯、草擬公文與商務文件。除非使用者另有要求，一律使用繁體中文（台灣用語）回覆。'
 
@@ -112,18 +112,18 @@ SYSTEM $systemPrompt
     if ($LASTEXITCODE -ne 0) { throw ("模型 {0} 匯入失敗。" -f $m.Name) }
 }
 
-# ---- 步驟 3/7：安裝 AnythingLLM 圖形介面 --------------------
+# ---- 步驟 3/8：安裝 AnythingLLM 圖形介面 --------------------
 $allmInstalled = Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Programs') -Filter '*anythingllm*' -ErrorAction SilentlyContinue
 if ($allmInstalled) {
-    Write-Host '[3/7] AnythingLLM 已安裝，略過。'
+    Write-Host '[3/8] AnythingLLM 已安裝，略過。'
 } else {
-    Write-Host '[3/7] 安裝 AnythingLLM 圖形介面...'
+    Write-Host '[3/8] 安裝 AnythingLLM 圖形介面...'
     Start-Process -Wait (Join-Path $root 'installers\AnythingLLMDesktop.exe') -ArgumentList '/S'
     Write-Host '      AnythingLLM 安裝完成。'
 }
 
-# ---- 步驟 4/7：安裝 pandoc 文件轉檔工具（選用） --------------
-Write-Host '[4/7] 安裝 pandoc 文件轉檔工具...'
+# ---- 步驟 4/8：安裝 pandoc 文件轉檔工具（選用） --------------
+Write-Host '[4/8] 安裝 pandoc 文件轉檔工具...'
 try {
     Start-Process -Wait 'msiexec.exe' -ArgumentList '/i',
         ('"' + (Join-Path $root 'installers\pandoc-3.10-windows-x86_64.msi') + '"'),
@@ -133,13 +133,13 @@ try {
     Write-Warning 'pandoc 安裝失敗（不影響主要功能），可稍後手動執行 installers 內的 msi。'
 }
 
-# ---- 步驟 5/7：安裝 Tesseract OCR（掃描 PDF 文字辨識） -------
+# ---- 步驟 5/8：安裝 Tesseract OCR（掃描 PDF 文字辨識） -------
 $tessExe = 'C:\Program Files\Tesseract-OCR\tesseract.exe'
 try {
     if (Test-Path $tessExe) {
-        Write-Host '[5/7] Tesseract OCR 已安裝，略過。'
+        Write-Host '[5/8] Tesseract OCR 已安裝，略過。'
     } else {
-        Write-Host '[5/7] 安裝 Tesseract OCR（會跳出權限確認視窗，請按「是」）...'
+        Write-Host '[5/8] 安裝 Tesseract OCR（會跳出權限確認視窗，請按「是」）...'
         Start-Process -Wait (Join-Path $root 'installers\tesseract-ocr-w64-setup-5.4.0.20240606.exe') -ArgumentList '/S'
     }
     $tessData = 'C:\Program Files\Tesseract-OCR\tessdata\chi_tra.traineddata'
@@ -157,13 +157,13 @@ try {
     Write-Warning 'Tesseract 安裝失敗（只影響掃描 PDF 的 OCR，其他功能不受影響）。'
 }
 
-# ---- 步驟 6/7：安裝 Python 與文書自動化工具 ------------------
+# ---- 步驟 6/8：安裝 Python 與文書自動化工具 ------------------
 try {
     $py = Join-Path $env:LOCALAPPDATA 'Programs\Python\Python313\python.exe'
     if (Test-Path $py) {
-        Write-Host '[6/7] Python 已安裝，略過安裝程式。'
+        Write-Host '[6/8] Python 已安裝，略過安裝程式。'
     } else {
-        Write-Host '[6/7] 安裝 Python 3.13...'
+        Write-Host '[6/8] 安裝 Python 3.13...'
         Start-Process -Wait (Join-Path $root 'installers\python-3.13.14-amd64.exe') `
             -ArgumentList '/quiet', 'InstallAllUsers=0', 'PrependPath=1', 'Include_test=0'
     }
@@ -177,8 +177,38 @@ try {
     Write-Warning ('Python 工具安裝失敗：' + $_.Exception.Message + '（不影響 AnythingLLM 主要功能）')
 }
 
-# ---- 步驟 7/7：驗證 -----------------------------------------
-Write-Host '[7/7] 驗證已安裝的模型：'
+# ---- 步驟 7/8：安裝工具到本機並加入右鍵「傳送到」選單 --------
+try {
+    $toolsDst = Join-Path $env:LOCALAPPDATA 'AI-DocTools'
+    New-Item -ItemType Directory -Force (Join-Path $toolsDst 'scripts') | Out-Null
+    Copy-Item (Join-Path $root 'tools\*.bat') $toolsDst -Force
+    Copy-Item (Join-Path $root 'tools\scripts\*.py') (Join-Path $toolsDst 'scripts') -Force
+    $sendTo = [Environment]::GetFolderPath('SendTo')
+    $wsh = New-Object -ComObject WScript.Shell
+    $menu = @(
+        @{ N = 'AI 摘要';          B = '拖入文件做摘要.bat' },
+        @{ N = 'AI OCR文字辨識';   B = '拖入PDF或圖片做OCR.bat' },
+        @{ N = 'AI 圖片解讀';      B = '拖入圖片AI解讀.bat' },
+        @{ N = 'AI Word就地改寫';  B = '拖入Word就地AI改寫.bat' },
+        @{ N = 'AI Word全文改寫';  B = '拖入Word改寫.bat' },
+        @{ N = 'AI Excel分析';     B = '拖入Excel分析.bat' },
+        @{ N = 'AI Excel欄位處理'; B = '拖入Excel欄位AI處理.bat' },
+        @{ N = 'AI 文件變簡報';    B = '拖入文件變簡報.bat' },
+        @{ N = 'AI MD轉Word';      B = '拖入MD轉Word.bat' }
+    )
+    foreach ($m in $menu) {
+        $lnk = $wsh.CreateShortcut((Join-Path $sendTo ($m.N + '.lnk')))
+        $lnk.TargetPath = Join-Path $toolsDst $m.B
+        $lnk.WorkingDirectory = $toolsDst
+        $lnk.Save()
+    }
+    Write-Host '[7/8] 工具已裝到本機，右鍵選單就緒（對檔案按右鍵 → 傳送到 → AI 工具）。'
+} catch {
+    Write-Warning ('右鍵選單設定失敗：' + $_.Exception.Message + '（仍可用 tools 資料夾的拖放方式）')
+}
+
+# ---- 步驟 8/8：驗證 -----------------------------------------
+Write-Host '[8/8] 驗證已安裝的模型：'
 & $ollama list
 Write-Host ''
 Write-Host '=============================================='
@@ -188,6 +218,8 @@ Write-Host '  2. LLM 供應商選 Ollama，模型選 qwen3-4b'
 Write-Host '  3. Embedder（嵌入模型）選 Ollama 的 bge-m3'
 Write-Host '  4. 建立工作區，把文件拖進去就能開始問答'
 Write-Host '  5. 批次摘要、OCR、AI 改寫、轉 Word：'
-Write-Host '     把檔案拖到 tools 資料夾裡的 .bat 上即可'
+Write-Host '     對檔案按右鍵 → 傳送到 → AI 工具（或拖到 tools 的 .bat 上）'
+Write-Host '  6. 全自動批次：執行 tools\啟動資料夾監看.bat，'
+Write-Host '     檔案丟進「文件\AI自動處理\收件匣」就自動處理'
 Write-Host '  詳細說明請看 README.md'
 Write-Host '=============================================='
