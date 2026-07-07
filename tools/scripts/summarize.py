@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import ai_common as ai
 
-EXTS = {".pdf", ".docx", ".txt", ".md"}
+EXTS = {".pdf", ".docx", ".txt", ".md", ".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
 
 
 def summarize_text(text):

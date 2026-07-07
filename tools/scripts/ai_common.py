@@ -11,6 +11,7 @@ import urllib.request
 from pathlib import Path
 
 OLLAMA = "http://127.0.0.1:11434"
+IMAGE_EXTS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
 
 
 def _post_json(url, payload):
@@ -140,10 +141,27 @@ def ocr_pdf_text(path):
     return "\n".join(parts)
 
 
+def ocr_image_text(path):
+    """單張圖片（PNG/JPG/TIF/BMP）→ Tesseract 辨識（繁中＋英文）。"""
+    tess = find_tesseract()
+    if not tess:
+        raise SystemExit("未安裝 Tesseract OCR，無法辨識圖片。請重新執行 install.bat。")
+    with tempfile.TemporaryDirectory() as td:
+        out = os.path.join(td, "out")
+        subprocess.run(
+            [tess, str(path), out, "-l", "chi_tra+eng"],
+            check=True, capture_output=True,
+        )
+        return Path(out + ".txt").read_text(encoding="utf-8", errors="ignore")
+
+
 def read_document(path):
-    """讀出 PDF / Word / 純文字的文字內容；沒有文字層的 PDF 自動改用 OCR。"""
+    """讀出 PDF / Word / 圖片 / 純文字的文字內容；掃描檔與圖片自動走 OCR。"""
     p = Path(path)
     ext = p.suffix.lower()
+    if ext in IMAGE_EXTS:
+        print("  圖片檔，使用 OCR 辨識文字...")
+        return ocr_image_text(p)
     if ext == ".pdf":
         import pymupdf
 
