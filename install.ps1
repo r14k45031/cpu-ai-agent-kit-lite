@@ -170,7 +170,7 @@ try {
     if (-not (Test-Path $py)) { throw 'Python 安裝程式未完成' }
     Write-Host '      安裝離線 Python 套件（python-docx / openpyxl / PyMuPDF）...'
     & $py -m pip install --no-index --find-links (Join-Path $root 'tools\wheels') `
-        --quiet --disable-pip-version-check python-docx openpyxl pymupdf
+        --quiet --disable-pip-version-check python-docx openpyxl pymupdf python-pptx pillow
     if ($LASTEXITCODE -ne 0) { throw 'pip 離線套件安裝失敗' }
     Write-Host '      文書自動化工具就緒（tools 資料夾內的 .bat）。'
 } catch {

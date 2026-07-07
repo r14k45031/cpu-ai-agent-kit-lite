@@ -170,13 +170,49 @@ def ocr_image_text(path):
         return Path(out + ".txt").read_text(encoding="utf-8", errors="ignore")
 
 
+def read_pptx_text(path):
+    """讀出 PowerPoint 每張投影片的文字。"""
+    from pptx import Presentation
+
+    prs = Presentation(str(path))
+    parts = []
+    for i, slide in enumerate(prs.slides, 1):
+        texts = [sh.text for sh in slide.shapes
+                 if sh.has_text_frame and sh.text.strip()]
+        parts.append(f"【第 {i} 張投影片】\n" + "\n".join(texts))
+    return "\n\n".join(parts)
+
+
+def read_excel_text(path, max_rows=200):
+    """把試算表轉成文字表格（每個工作表最多 max_rows 列）。"""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(str(path), read_only=True, data_only=True)
+    parts = []
+    for ws in wb.worksheets:
+        lines = [f"【工作表：{ws.title}】（{ws.max_row} 列 × {ws.max_column} 欄）"]
+        for r, row in enumerate(ws.iter_rows(values_only=True), 1):
+            if r > max_rows:
+                lines.append(f"…（其餘 {ws.max_row - max_rows} 列略）")
+                break
+            lines.append("\t".join("" if c is None else str(c) for c in row))
+        parts.append("\n".join(lines))
+    wb.close()
+    return "\n\n".join(parts)
+
+
 def read_document(path):
-    """讀出 PDF / Word / 圖片 / 純文字的文字內容；掃描檔與圖片自動走 OCR。"""
+    """讀出 PDF / Word / PowerPoint / Excel / 圖片 / 純文字的文字內容；
+    掃描檔與圖片自動走 OCR。"""
     p = Path(path)
     ext = p.suffix.lower()
     if ext in IMAGE_EXTS:
         print("  圖片檔，使用 OCR 辨識文字...")
         return ocr_image_text(p)
+    if ext == ".pptx":
+        return read_pptx_text(p)
+    if ext in (".xlsx", ".xlsm"):
+        return read_excel_text(p)
     if ext == ".pdf":
         import pymupdf
 

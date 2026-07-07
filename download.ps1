@@ -39,7 +39,9 @@ $wheels = @(
     @{ Pkg = 'typing-extensions'; Ver = '4.16.0'; File = 'typing_extensions-4.16.0-py3-none-any.whl' },
     @{ Pkg = 'openpyxl';          Ver = '3.1.5';  File = 'openpyxl-3.1.5-py2.py3-none-any.whl' },
     @{ Pkg = 'et-xmlfile';        Ver = '2.0.0';  File = 'et_xmlfile-2.0.0-py3-none-any.whl' },
-    @{ Pkg = 'pymupdf';           Ver = '1.28.0'; File = 'pymupdf-1.28.0-cp310-abi3-win_amd64.whl' }
+    @{ Pkg = 'pymupdf';           Ver = '1.28.0'; File = 'pymupdf-1.28.0-cp310-abi3-win_amd64.whl' },
+    @{ Pkg = 'python-pptx';       Ver = '1.0.2';  File = 'python_pptx-1.0.2-py3-none-any.whl' },
+    @{ Pkg = 'pillow';            Ver = '12.3.0'; File = 'pillow-12.3.0-cp313-cp313-win_amd64.whl' }
 )
 
 foreach ($d in 'installers', 'models', 'tools\tessdata', 'tools\wheels') {
