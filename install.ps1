@@ -170,7 +170,7 @@ try {
     if (-not (Test-Path $py)) { throw 'Python 安裝程式未完成' }
     Write-Host '      安裝離線 Python 套件（python-docx / openpyxl / PyMuPDF）...'
     & $py -m pip install --no-index --find-links (Join-Path $root 'tools\wheels') `
-        --quiet --disable-pip-version-check python-docx openpyxl pymupdf python-pptx pillow
+        --quiet --disable-pip-version-check python-docx openpyxl pymupdf pymupdf4llm python-pptx pillow
     if ($LASTEXITCODE -ne 0) { throw 'pip 離線套件安裝失敗' }
     Write-Host '      文書自動化工具就緒（tools 資料夾內的 .bat）。'
 } catch {
@@ -194,7 +194,8 @@ try {
         @{ N = 'AI Excel分析';     B = '拖入Excel分析.bat' },
         @{ N = 'AI Excel欄位處理'; B = '拖入Excel欄位AI處理.bat' },
         @{ N = 'AI 文件變簡報';    B = '拖入文件變簡報.bat' },
-        @{ N = 'AI MD轉Word';      B = '拖入MD轉Word.bat' }
+        @{ N = 'AI MD轉Word';      B = '拖入MD轉Word.bat' },
+        @{ N = '文件轉Markdown';   B = '拖入文件轉MD.bat' }
     )
     foreach ($m in $menu) {
         $lnk = $wsh.CreateShortcut((Join-Path $sendTo ($m.N + '.lnk')))
