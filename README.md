@@ -5,7 +5,7 @@
 總下載量只有約 5 GB。
 
 > 電腦有 32 GB 記憶體？請改用
-> [完整版 cpu-ai-agent-kit-full](../../../cpu-ai-agent-kit-full)，
+> [完整版 cpu-ai-agent-kit-full](https://github.com/r14k45031/cpu-ai-agent-kit-full)，
 > 內含品質好得多的 30B 主力模型。
 
 安裝後可以做的事：
