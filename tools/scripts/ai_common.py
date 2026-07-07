@@ -68,12 +68,27 @@ def pick_model():
     return _model_cache
 
 
-def chat(prompt, model=None):
-    """對本機模型送出提示，串流接收，回傳完整回答。"""
-    model = model or pick_model()
+def pick_vision_model():
+    """找已安裝的視覺模型（qwen3-vl）。"""
+    vl = [m for m in list_models() if m.startswith("qwen3-vl")]
+    if not vl:
+        raise SystemExit("找不到視覺模型 qwen3-vl，請先執行 install.bat 完成安裝。")
+    return vl[0]
+
+
+def chat(prompt, model=None, image_path=None):
+    """對本機模型送出提示，串流接收，回傳完整回答。可附一張圖片。"""
+    msg = {"role": "user", "content": prompt}
+    if image_path:
+        import base64
+
+        msg["images"] = [base64.b64encode(Path(image_path).read_bytes()).decode()]
+        model = model or pick_vision_model()
+    else:
+        model = model or pick_model()
     payload = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [msg],
         "stream": True,
     }
     pieces = []

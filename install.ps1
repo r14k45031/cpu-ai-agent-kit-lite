@@ -62,6 +62,8 @@ $systemPrompt = '你是專業的中文文書處理助理，擅長摘要、潤稿
 
 $models = @(
     @{ Name = 'qwen3-4b'; Gguf = 'Qwen3-4B-Instruct-2507-Q4_K_M.gguf'; Chat = $true },
+    @{ Name = 'qwen3-vl'; Gguf = 'Qwen3-VL-4B-Instruct-Q4_K_M.gguf'
+       Proj = 'Qwen3-VL-4B-mmproj-F16.gguf';                           Chat = $false },
     @{ Name = 'bge-m3';   Gguf = 'bge-m3-Q8_0.gguf';                   Chat = $false }
 )
 
@@ -78,7 +80,20 @@ foreach ($m in $models) {
         Write-Host ("      {0} 已存在，略過。" -f $m.Name)
         continue
     }
-    if ($m.Chat) {
+    if ($m.Proj) {
+        $projPath = Join-Path $root ('models\' + $m.Proj)
+        if (-not (Test-Path $projPath)) {
+            Write-Warning ("找不到視覺投影器 models\{0}，跳過 {1}。" -f $m.Proj, $m.Name)
+            continue
+        }
+        $mfContent = @"
+FROM $ggufPath
+FROM $projPath
+PARAMETER num_ctx 8192
+PARAMETER temperature 0.7
+SYSTEM 你是圖片理解助理，一律使用繁體中文（台灣用語）回覆。
+"@
+    } elseif ($m.Chat) {
         $mfContent = @"
 FROM $ggufPath
 PARAMETER num_ctx 8192

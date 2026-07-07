@@ -1,6 +1,6 @@
 ﻿# ============================================================
 #  下載安裝包所需的全部大型檔案（在「有網路」的電腦上執行）
-#  輕量版：只含 4B 模型，總下載量約 5 GB，8 GB 記憶體電腦可跑
+#  輕量版：只含 4B 模型，總下載量約 8.5 GB，8 GB 記憶體電腦可跑
 #  下載完成後，把整個資料夾複製到隨身碟，
 #  帶到離線電腦執行 install.bat 即可。
 # ============================================================
@@ -25,7 +25,11 @@ $files = @(
     @{ Out = 'models\bge-m3-Q8_0.gguf'
        Url = 'https://huggingface.co/gpustack/bge-m3-GGUF/resolve/main/bge-m3-Q8_0.gguf' },
     @{ Out = 'models\Qwen3-4B-Instruct-2507-Q4_K_M.gguf'
-       Url = 'https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/resolve/main/Qwen3-4B-Instruct-2507-Q4_K_M.gguf' }
+       Url = 'https://huggingface.co/unsloth/Qwen3-4B-Instruct-2507-GGUF/resolve/main/Qwen3-4B-Instruct-2507-Q4_K_M.gguf' },
+    @{ Out = 'models\Qwen3-VL-4B-Instruct-Q4_K_M.gguf'
+       Url = 'https://huggingface.co/unsloth/Qwen3-VL-4B-Instruct-GGUF/resolve/main/Qwen3-VL-4B-Instruct-Q4_K_M.gguf' },
+    @{ Out = 'models\Qwen3-VL-4B-mmproj-F16.gguf'
+       Url = 'https://huggingface.co/unsloth/Qwen3-VL-4B-Instruct-GGUF/resolve/main/mmproj-F16.gguf' }
 )
 
 # Python 離線套件（版本鎖定，從 PyPI 官方取得）
@@ -43,7 +47,7 @@ foreach ($d in 'installers', 'models', 'tools\tessdata', 'tools\wheels') {
 }
 
 $freeGB = [math]::Round((Get-PSDrive ($root.Substring(0,1))).Free / 1GB)
-Write-Host ("目前磁碟剩餘 {0} GB；輕量版全部下載約需 5 GB。" -f $freeGB)
+Write-Host ("目前磁碟剩餘 {0} GB；輕量版全部下載約需 8.5 GB。" -f $freeGB)
 Write-Host '中斷後重新執行本腳本會從斷點續傳。'
 Write-Host ''
 

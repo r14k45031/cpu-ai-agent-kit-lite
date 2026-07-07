@@ -2,7 +2,7 @@
 
 不需要網路、不需要 GPU 的本機 AI 文書處理系統。
 輕量版使用 **Qwen3-4B** 模型，**8 GB 記憶體的舊電腦、筆電都能跑**，
-總下載量只有約 5 GB。
+總下載量只有約 8.5 GB。
 
 > 電腦有 32 GB 記憶體？請改用
 > [完整版 cpu-ai-agent-kit-full](https://github.com/r14k45031/cpu-ai-agent-kit-full)，
@@ -13,6 +13,7 @@
 - 摘要、潤稿、改寫、中英翻譯、草擬公文與商務文件
 - 把 Word / PDF 丟進知識庫，針對內容問答（RAG）
 - 掃描 PDF 與圖片（PNG/JPG）的 OCR 文字辨識（繁體中文＋英文）
+- 圖片內容 AI 理解：描述照片、讀懂圖表與手寫註記（Qwen3-VL 視覺模型）
 - 批次處理：整個資料夾的文件一鍵各自摘要成 Word
 - AI 產出的內容一鍵轉成 .docx
 
@@ -30,7 +31,7 @@ GitHub 放不下模型與安裝程式（單檔上限 100 MB），所以分成兩
 ```
 ┌─ 有網路的電腦 ──────────────────┐      ┌─ 離線目標電腦 ────────────┐
 │ 1. git clone 本倉庫（或下載 ZIP）│      │ 4. 雙擊 install.bat       │
-│ 2. 雙擊 download.bat（約 5 GB）  │ ─►   │ 5. 開始使用               │
+│ 2. 雙擊 download.bat（約 8.5GB） │ ─►   │ 5. 開始使用               │
 │ 3. 整個資料夾複製到隨身碟        │ USB  │                          │
 └─────────────────────────────────┘      └──────────────────────────┘
 ```
@@ -43,7 +44,7 @@ GitHub 放不下模型與安裝程式（單檔上限 100 MB），所以分成兩
 |---|---|
 | 作業系統 | Windows 10 / 11，64 位元 |
 | 記憶體 | 8 GB 以上 |
-| 磁碟空間 | C 槽至少 15 GB |
+| 磁碟空間 | C 槽至少 25 GB |
 | 顯示卡 | 不需要，純 CPU 執行 |
 | 網路 | 不需要，全程離線 |
 | 權限 | 安裝 Tesseract OCR 時會跳一次「使用者帳戶控制」視窗，按「是」即可 |
@@ -56,6 +57,7 @@ GitHub 放不下模型與安裝程式（單檔上限 100 MB），所以分成兩
 | AnythingLLMDesktop.exe | 圖形介面＋文件知識庫（RAG） | 395 MB |
 | pandoc / Tesseract（含繁中）/ Python＋離線套件 | 轉檔、OCR、自動化 | 約 220 MB |
 | Qwen3-4B-Instruct-2507 Q4_K_M | 對話模型 | 2.5 GB |
+| Qwen3-VL-4B-Instruct＋視覺投影器 | 圖片理解模型 | 3.3 GB |
 | bge-m3 Q8_0 | 向量嵌入（知識庫檢索） | 0.6 GB |
 
 模型來源：Hugging Face（unsloth/Qwen3-4B-Instruct-2507-GGUF、gpustack/bge-m3-GGUF）。
@@ -77,6 +79,7 @@ GitHub 放不下模型與安裝程式（單檔上限 100 MB），所以分成兩
 |---|---|---|
 | 拖入文件做摘要.bat | 拖一個檔案**或整個資料夾**上去 | 每份文件旁產生 `_摘要.docx` |
 | 拖入PDF或圖片做OCR.bat | 拖掃描 PDF 或圖片上去 | `_OCR.txt` 與 `_OCR.docx` |
+| 拖入圖片AI解讀.bat | 拖圖片上去，輸入想問的問題（Enter＝詳細描述） | `_解讀.docx` |
 | 拖入Word改寫.bat | 拖 docx/txt 上去，輸入指示（Enter＝潤稿） | `_改寫.docx` |
 | 拖入MD轉Word.bat | 拖 AI 產出的 .md/.txt 上去 | 同名 `.docx` |
 
