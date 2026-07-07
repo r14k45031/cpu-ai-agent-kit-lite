@@ -1,0 +1,6 @@
+installers/
+models/
+tools/tessdata/
+tools/wheels/
+*.gguf
+__pycache__/
